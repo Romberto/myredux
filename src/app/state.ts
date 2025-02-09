@@ -1,8 +1,11 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
-import reducerFavorite from '../components/UI/ReceptList/reseptListSlice.slice';
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import receptReduser from '../components/UI/ReceptList/reseptListSlice.slice'
+import toggleReduser from '../components/UI/ReceptItem/Togglerecept.slice'
+
 
 const reducers = combineReducers({
-    reducerFavorite
+    receptReduser,
+    toggleReduser
 });
 
 export const store = configureStore({
@@ -10,5 +13,4 @@ export const store = configureStore({
 });
 
 export type RootState = ReturnType<typeof store.getState>
-
 export type AppDispatch = typeof store.dispatch

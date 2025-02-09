@@ -1,0 +1,11 @@
+.recerts{
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    padding: 10px 5px;
+    border: 1px solid #ca3939;
+    border-radius: 6px;
+    box-shadow: 3px 3px 4px #ca3939;
+    width: 300px;
+    background-color: black;
+}

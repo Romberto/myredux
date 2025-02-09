@@ -1,39 +1,64 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { Action, createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createAppAsyncThunk } from "../../../app/hooks";
 import { ReceptItemType } from "../../../utils/types";
+import { fetchAllRecept } from "../../../servises/api";
 
-type ReceptStateType = {
-  favoritesList: ReceptItemType[];
-};
+export const fetchReceptAll = createAsyncThunk(
+  "recepts/getAllRecepts",
+  async () => {
+    const data = await fetchAllRecept();
+    return data;
+  }
+);
 
-const initialState: ReceptStateType = {
-  favoritesList: [],
-};
-
-const ReceptSlice = createSlice({
-  name: "favorites",
-  initialState,
-  reducers: {
-    ToggleItemInFavorites: (state, action) => {
-      const payload = action.payload; // Извлекаем данные из action
-      const isExist = state.favoritesList.some(
-        (item) => item.id === payload.id
-      ); // Проверяем, существует ли элемент
-
-      if (!isExist) {
-        // Если элемент не существует, добавляем его в список
-        state.favoritesList.push(payload);
-      } else {
-        // Если элемент существует, фильтруем его из списка
-        state.favoritesList = state.favoritesList.filter(
-          (item) => item.id !== payload.id
-        );
+export const AddNewRecept = createAsyncThunk(
+  'recepts/addNewRecept',
+  async()=>{
+    try{
+      const data = {
+        id: "45",
+        title: 'Mакароны',
+        views: 400
       }
-    },
-  },
-  extraReducers(builder) {
+
+      const response = await fetch('http://localhost:3000/recepts',{
+        method: "POST",
+        headers:{
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+      if(!response.ok){
+        throw new Error('Сеть ответила с ошибкой');
+      }
+      console.log('sucssesfull')
+      return  await response.json()
       
+    }catch(error){
+      console.error(error)
+    }
+  }
+)
+
+const initialState: { recepts: ReceptItemType[],isLoading: "pending" | "fulfilled" | 'rejected'} = {
+  recepts: [],
+  isLoading: "pending"
+};
+
+const receptSlice = createSlice({
+  name: "recepts",
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder.addCase(fetchReceptAll.fulfilled, (state, action) => {
+      state.recepts = action.payload;
+      state.isLoading = 'fulfilled'
+    });
+    builder.addCase(AddNewRecept.fulfilled,(state, action:PayloadAction<ReceptItemType>) => {
+      state.recepts.push(action.payload)
+      state.isLoading = 'fulfilled'
+    });
   },
 });
-
-export default ReceptSlice.reducer;
-export const { ToggleItemInFavorites } = ReceptSlice.actions;
+export const {} = receptSlice.actions;
+export default receptSlice.reducer;

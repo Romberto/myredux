@@ -2,6 +2,7 @@ import { ButtonHTMLAttributes } from "react";
 
 export type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
   btnState: boolean;
+  onClick:()=>void;
   children?: React.ReactNode;
   className?: string;
   
@@ -20,10 +21,13 @@ export type CardListType = {
 }
 
 export type ReceptItemType = {
-  id: number,
-  name: string
+  id: string,
+  title: string,
+  views: number
 }
 
-export type ReceptType ={
-  data : ReceptItemType[]
+
+
+export type ReceptType = {
+
 }

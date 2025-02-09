@@ -1,45 +1,37 @@
-import React, { useCallback, useState } from "react";
+import React, { useEffect } from "react";
 import styled from "./ReceptList.module.css";
-import { Button } from "../Button/Button";
 import { ReceptItemType } from "../../../utils/types";
 import { useAppDispatch, useAppSelector } from "../../../app/hooks";
-import { ToggleItemInFavorites } from "./reseptListSlice.slice";
+import { fetchReceptAll } from "../ReceptList/reseptListSlice.slice";
+import { ReceptItem } from "../ReceptItem/ReceptItem";
+import { getAllFavoritas } from "../ReceptItem/Togglerecept.slice";
 
-const recepts: ReceptItemType[] = [
-  { id: 1, name: "лазанья" },
-  { id: 2, name: "каша" },
-  { id: 3, name: "борщ" },
-];
-
-export const ReceptList = () => {
+const ReceptList = () => {
   const dispatch = useAppDispatch();
-
-  const favorites = useAppSelector(
-    (state) => state.reducerFavorite.favoritesList
+  const recepts: ReceptItemType[] = useAppSelector(
+    (state) => state.receptReduser.recepts
   );
-  console.log(favorites);
-  const handelClick = useCallback(
-    (item: ReceptItemType) => {
-      dispatch(ToggleItemInFavorites(item));
-    },
-    [dispatch]
-  );
-
+  const isLoading = useAppSelector((state) => state.receptReduser.isLoading);
+  useEffect(() => {
+    dispatch(fetchReceptAll());
+    dispatch(getAllFavoritas());
+  }, [dispatch]);
+  const toggleFavorites = () => {
+    console.log("fdfgd");
+  };
   return (
-    <ul>
-      {recepts.map((item) => (
-        <li key={item.id}>
-          <div>
-            <h3>{item.name}</h3>
-            <Button
-              onClick={() => handelClick(item)}
-              btnState={
-                true ? favorites.some((el) => el.id === item.id) : false
-              }
-            ></Button>
-          </div>
-        </li>
-      ))}
-    </ul>
+    <>
+      { isLoading === "pending" ? "isLoad..." : isLoading === "fulfilled" ? <ul className={styled.recerts}>
+        {recepts.map((item) => {
+          return (
+            <li key={item.id}>
+              <ReceptItem {...item} />
+            </li>
+          );
+        })}
+      </ul>: "error"}
+    </>
   );
 };
+
+export default React.memo(ReceptList);
