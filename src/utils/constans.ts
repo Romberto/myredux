@@ -7,3 +7,8 @@ export   const expData = {
     title: "City Landscape",
     image_id: "109d0e0b-d6ae-6d97-01b7-002376d27ba9",
   };
+
+  export enum PATH {
+    HOME = '/',
+    ADDRECEPTMOMAL = 'addrecept'
+  }

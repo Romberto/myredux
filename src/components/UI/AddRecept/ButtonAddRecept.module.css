@@ -1,0 +1,15 @@
+.btn{
+    width: 150px;
+    height: 150px;
+    border-radius: 6px;
+    border: 2px solid rgb(253, 175, 175);
+    background-color: crimson;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn:active{
+    background-color: rgb(223, 100, 100);
+}
